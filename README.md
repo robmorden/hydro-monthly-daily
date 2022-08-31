@@ -1,5 +1,5 @@
 # hydro-monthly-daily
-This package calculates hydrological indicators for monthly and daily flow series, then compares them with PLSR.
+This repository includes code to calculate hydrological indicators for monthly and daily flow series, then compare them with PLSR.
 
 For further information about the purpose of this code, please refer to the paper Morden et al (in print).
 
