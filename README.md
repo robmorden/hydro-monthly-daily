@@ -52,7 +52,7 @@ The code produces a csv file called `Qdaily_ML_171stats_py.csv`, and another cal
 * `Stats-main.py` loads the input data, calls the daily statistics routine, aggregates the inputs to monthly, runs the monthly statistics routine, then saves the output.
 * `Stats_daily.py` takes daily flow inputs, then calculates all daily statistics and puts them in a DataFrame.
 * `Stats_daily.py` takes monthly flow inputs, then calculates all monthly statistics and puts them in a DataFrame.
-* `Stats_functions.py` includes a range of functions for various hydrological calculations, such as rise and fall rates , or Colwell predictability calculations. Many of these functions rely on the [Numba](https://numba.pydata.org/numba-doc/latest/index.html) library and adopt the `@jit(nopython=True)` decorator. If you have never come across this, don’t panic. You can just comment out all of the `@jit` decorators and the code will work just fine. But if you leave them there the code will work waaaay faster for multiple sites. When using Numba, the entire routine should run in around 1 or 2 seconds per site. 
+* `Stats_functions.py` includes a range of functions for various hydrological calculations, such as rise and fall rates, or Colwell predictability calculations. Many of these functions rely on the [Numba](https://numba.pydata.org/numba-doc/latest/index.html) library and adopt the `@jit(nopython=True)` decorator. If you have never come across this, don’t panic. You can just comment out all of the `@jit` decorators and the code will work just fine. But if you leave them there the code will work waaaay faster for multiple sites. When using Numba, the entire routine should run in around 1 or 2 seconds per site. 
 
 ## Regime classes
 ### Overview
