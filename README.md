@@ -4,7 +4,7 @@ This repository includes code to calculate hydrological indicators for monthly a
 For further information about the purpose of this code, please refer to the paper Morden et al (in print).
 
 ## Installation
-I am a complete GitHub newbie as of August 2022. There is no package to install, this is simply a repository of my code. If it looks useful, please download it and reference this repository or my paper Morden et al (in print).
+I am a complete GitHub newbie as of August 2022. There is no prepared package to install, this is simply a repository of my code. If it looks useful, please download it and reference this repository or my paper Morden et al (in print).
 
 ## Overview
 This repository has 3 basic parts:
