@@ -11,6 +11,10 @@ Modified June 2022:
     - In practice, run the cross validation to find the bet number of components, then..
     - ..use the n=20 kfold data to run the whole thing from scratch.
 
+Modified November 2022:
+    - Changed the transform function to ensure that reverse transforms bottom out at zero, otherwise the reverse box cox will produce a NAN.
+    - Swapped the order of (obs,est) for some function calls. I got them back to front. Whoopsy.
+    - Output results for each fold so that uncertainty can be reported in the paper.
 """
 
 import pandas as pd                                                            # external libraries
@@ -121,10 +125,15 @@ def tf_reverse(dfin,dfin_lm):  #pt_dict):   #,tf_mins):
         tf = (dfin[col] * sd) + m
         
         if meth == 'bc':
-            tf = special.inv_boxcox(tf - 0.01,lm)
+            tf = special.inv_boxcox(tf,lm) - 0.01
         else:
             tf = inv_yeojohnson(tf,lm)
         
+        tf[np.isnan(tf)] = 0.0
+        #tf = tf.fillna(0)                           # this is a special line of code!
+                                                    # Reverse box cox can only give outputs >0,
+                                                    # otherwise the power transform will give a 'nan' value.
+                                                    # This line ensures all values bottom out at zero.
         dfout.loc[:,col] = tf
         
     return dfout
@@ -296,6 +305,9 @@ yv_est_raw = yv_obs.copy()
  
 xv_obs = pd.DataFrame(index=x_raw.index,columns=x_raw.columns,dtype='float64')
 
+fold_R2 = pd.DataFrame(index=np.arange(nfold),columns=y_raw.columns,dtype='float64')
+fold_rmse = fold_R2.copy()
+
 for i in range(nfold):                                                         # for each fold....
     plsr = PLSRegression(n_components=n_comp, scale=False)                     # do the regression with >>training<< data
     plsr.fit(xtrain[i],ytrain[i])
@@ -311,6 +323,25 @@ for i in range(nfold):                                                         #
     yv_obs.iloc[idxval[i],:] = yval[i]                                         # daily transf observed
     xv_obs.iloc[idxval[i],:] = xval[i]                                         # monthly transf observed
     
+    # Create results per fold -------------------------------------------------------------------------------
+    obs = yval[i]
+    est = y_est
+    for col in yv_est.columns:
+        fold_R2.loc[i,col] = r2_score(obs[col], est[col])                      # performance per fold per indicator
+        fold_rmse.loc[i,col] = sqrt(mean_squared_error(obs[col],est[col]))
+        
+    fold_R2.loc[i,'all data'] = r2_score(obs, est)                             # performance per fold ALL indicators
+    fold_rmse.loc[i,'all data'] = sqrt(mean_squared_error(obs,est))
+
+obs = yv_obs
+est = yv_est
+for col in yv_est.columns:
+    fold_R2.loc['all folds',col] = r2_score(obs[col], est[col])                          # performance ALL folds per indicator
+    fold_rmse.loc['all folds',col] = sqrt(mean_squared_error(obs[col],est[col]))
+    
+fold_R2.loc['all folds','all data'] = r2_score(obs, est)                                 # performance ALL folds ALL indicators
+fold_rmse.loc['all folds','all data'] = sqrt(mean_squared_error(obs,est))
+    
 # Create outputs per site -----------------------------------------------------------------------------------
 site_results = pd.DataFrame(index=yv_obs.index,columns=['RMSE','R2','class num','class name'])
 site_results['class num'] = flowclasses['Category num']                        # get class name and num from predefined file
@@ -318,7 +349,7 @@ site_results['class name'] = flowclasses['Category name']
 
 for irow,row in enumerate(yv_obs.index):                                           # loop through each site
     site_rmse = sqrt(mean_squared_error(yv_obs.iloc[irow,:],yv_est.iloc[irow,:]))   # RMSE
-    site_R2 = r2_score(yv_est.iloc[irow,:], yv_obs.iloc[irow,:])
+    site_R2 = r2_score(yv_obs.iloc[irow,:], yv_est.iloc[irow,:])
     site_results.loc[row,'RMSE'] = site_rmse
     site_results.loc[row,'R2'] = site_R2
 
@@ -365,7 +396,7 @@ for icol,col in enumerate(yv_obs.columns):
     yv_results.loc[col,'RMSE'] = sqrt(mean_squared_error(yobs,yest))
         
     if yobs.abs().sum() != 0:                                                  # if the observed is NOT all zeros 
-        yv_results.loc[col,'R2 tf'] = 1-( (yres**2).sum() / (yobs**2).sum() )  # R2 transformed (1 - sumsq residuals / sumsq obs)
+        yv_results.loc[col,'R2 tf'] = r2_score(yobs,yest) #1-( (yres**2).sum() / (yobs**2).sum() )  # R2 transformed (1 - sumsq residuals / sumsq obs)
         yv_results.loc[col,'Rs y-est tf'] = yobs.corr(yest,method='spearman')  # Spearman (est and observed, both transformed)
     
     if col in xv_obs.columns:
@@ -379,7 +410,7 @@ for icol,col in enumerate(yv_obs.columns):
     yres = yobs - yest
     
     if yobs.abs().sum() != 0:                                                  # if the observed is NOT all zeros 
-        yv_results.loc[col,'R2 lin'] = 1-( (yres**2).sum() / (yobs**2).sum() ) # R2 linear (1 - sumsq residuals / sumsq obs)
+        yv_results.loc[col,'R2 lin'] = r2_score(yobs,yest) #1-( (yres**2).sum() / (yobs**2).sum() ) # R2 linear (1 - sumsq residuals / sumsq obs)
         yv_results.loc[col,'Rs y-est lin'] = yobs.corr(yest,method='spearman') # Spearman (est and observed, both linear)
     
     if col in xv_obs.columns:
@@ -389,7 +420,7 @@ for icol,col in enumerate(yv_obs.columns):
             # if col in xv_obs.columns:
             #     xy_corr.loc[col,'Rs'] = yv_results.loc[col,'Rs x-obs lin']
 
-# Run full model trained on all sites (just to get coeffs and loadings) -------------------------------------
+# Run final model trained on all sites (just to get coeffs and loadings) -------------------------------------
 ytrain_all, pt = tf(y_raw)                                                     # transform, DON'T keep the transformation details
 xtrain_all, pt = tf(x_raw)
 
@@ -437,5 +468,8 @@ if savedata:
 
     class_rmse.to_csv(paths['plsr'] + filestub +'_ModelFitByClass.csv')
     site_results.to_csv(paths['plsr'] + filestub +'_ModelFitBySite.csv')
+    
+    fold_R2.to_csv(paths['plsr'] + filestub +'_foldR2.csv')
+    fold_rmse.to_csv(paths['plsr'] + filestub +'_foldRMSE.csv')
 
 print('   Complete!')
