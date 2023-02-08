@@ -1,10 +1,10 @@
 # hydro-monthly-daily
 This repository includes code to calculate hydrological indicators for monthly and daily flow series, then compare them with PLSR.
 
-For further information about the purpose of this code, please refer to the paper Morden et al (in print).
+For further information about the purpose of this code, please refer to the paper “Monthly flow indicators can be used to infer daily stream flow behaviour across Australia” (Morden et al., 2023). The paper is [free to read and download from here](https://doi.org/10.1016/j.jhydrol.2023.129078).
 
 ## Installation
-I am a complete GitHub newbie as of August 2022. There is no prepared package to install, this is simply a repository of my code. If it looks useful, please download it and reference this repository or my paper Morden et al (in print).
+I am a complete GitHub newbie as of August 2022. There is no prepared package to install, this is simply a repository of my code. If it looks useful, please download it and reference this repository or my paper Morden et al (2023).
 
 ## Overview
 This repository has 3 basic parts:
@@ -111,6 +111,8 @@ Jumani, S., Deitch, M. J., Kaplan, D., Anderson, E. P., Krishnaswamy, J., Lecour
 Kennard, M. J., Pusey, B. J., Olden, J. D., Mackay, S. J., Stein, J. L., & Marsh, N. (2010). Classification of natural flow regimes in Australia to support environmental flow management. Freshwater Biology, 55(1), 171–193. https://doi.org/10.1111/j.1365-2427.2009.02307.x
 
 Laizé, C. L. R., Acreman, M. C., Schneider, C., Dunbar, M. J., Houghton-Carr, H. A., Flörke, M., & Hannah, D. M. (2014). Projected flow alteration and ecological risk for pan-European rivers. River Research and Applications, 30(3), 299–314. https://doi.org/10.1002/rra.2645
+
+Morden, R., Horne, A., Nathan, R., Bond, N. R., & Olden, J. D. (2023). Monthly flow indicators can be used to infer daily stream flow behaviour across Australia. Journal of Hydrology, 617, 129078. https://doi.org/10.1016/J.JHYDROL.2023.129078
 
 Olden, J. D., & Poff, N. L. (2003). Redundancy and the choice of hydrologic indices for characterizing streamflow regimes. River Research and Applications, 19(2), 101–121. https://doi.org/10.1002/rra.700
 
