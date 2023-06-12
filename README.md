@@ -13,7 +13,14 @@ This repository has 3 basic parts:
 2. **RegimeClasses** – This part classifies the flow regime for each streamflow site into a regime ‘class’.
 3. **PLSR** – This part uses partial least squares regression to compare flow statistics based on daily data with the same statistics based on monthly data, and use the monthly data to predict the daily data.
 
+Flow data and catchment areas for 3 sample sites have been provided to help users understand the format requirements and how the code works.
+
 Each of these parts is discussed below.
+
+## Quick start
+* If you simply want run the code to calculate flow indicators for a number of sites, set up your input data (refer to Inputs section below) then run the file 'Stats_main.py'. It will organise everything for you.
+* If you want to determine flow regime classes, set up your input data (refer to Inputs section below) then run the file 'RegimeClasses.py'.
+* If you want to do the PLSR calculations, you need to run 'Stats_main.py', then 'RegimeClasses.py', then 'PLSR_analysis.py' in that order, one at a time.
 
 ## Stats
 ### Overview
@@ -49,9 +56,10 @@ The code produces a csv file called `Qdaily_ML_171stats_py.csv`, and another cal
 * **Flows divided by catchment area** - In some situations, it may be useful to calculate indicators based on flow data standardised by area. If the `calcHITdaily` and `calcHITmonthly` functions are called with the last parameter set to `mm`, all flows will be divided by area prior to calculation. Specific indicators which rely on catchment areas are automatically modified accordingly.
 
 ### Code structure
+If you want to run the code as is, just run 'stats_main.py'. It will do all of the necessary calculations.
 * `Stats-main.py` loads the input data, calls the daily statistics routine, aggregates the inputs to monthly, runs the monthly statistics routine, then saves the output.
 * `Stats_daily.py` takes daily flow inputs, then calculates all daily statistics and puts them in a DataFrame.
-* `Stats_daily.py` takes monthly flow inputs, then calculates all monthly statistics and puts them in a DataFrame.
+* `Stats_monthly.py` takes monthly flow inputs, then calculates all monthly statistics and puts them in a DataFrame.
 * `Stats_functions.py` includes a range of functions for various hydrological calculations, such as rise and fall rates, or Colwell predictability calculations. Many of these functions rely on the [Numba](https://numba.pydata.org/numba-doc/latest/index.html) library and adopt the `@jit(nopython=True)` decorator. If you have never come across this, don’t panic. You can just comment out all of the `@jit` decorators and the code will work just fine. But if you leave them there the code will work waaaay faster for multiple sites. When using Numba, the entire routine should run in around 1 or 2 seconds per site. 
 
 ## Regime classes
