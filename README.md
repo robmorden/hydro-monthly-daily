@@ -18,9 +18,9 @@ Flow data and catchment areas for 3 sample sites have been provided to help user
 Each of these parts is discussed below.
 
 ## Quick start
-* If you simply want run the code to calculate flow indicators for a number of sites, set up your input data (refer to Inputs section below) then run the file 'Stats_main.py'. It will organise everything for you.
-* If you want to determine flow regime classes, set up your input data (refer to Inputs section below) then run the file 'RegimeClasses.py'.
-* If you want to do the PLSR calculations, you need to run 'Stats_main.py', then 'RegimeClasses.py', then 'PLSR_analysis.py' in that order, one at a time.
+* If you simply want run the code to calculate flow indicators for a number of sites, set up your input data (refer to Stats/Inputs section below) then run the file `Stats_main.py`. It will organise everything for you.
+* If you want to determine flow regime classes, set up your input data (refer to Regime classes/Inputs section below) then run the file `RegimeClasses.py`.
+* If you want to do the PLSR calculations, you need to run `Stats_main.py`, then `RegimeClasses.py`, then `PLSR_analysis.py` in that order, one at a time.
 
 ## Stats
 ### Overview
