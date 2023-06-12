@@ -15,7 +15,9 @@ from numba import jit
 import scipy.stats as scistat
 import scipy.special as scispec
 import math
-from PathsFiles import paths,files    #,statslist_mon,statslist_day
+from PathsFiles import paths,files    
+
+# NOTE - main code is further down. There are some useful subroutines at the top here.
 
 # ==================================================================================================================
 # Trim a daily flow series to remove NaNs and partial years at the start and end

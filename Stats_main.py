@@ -5,18 +5,25 @@ Hydrologic Index Tool (HIT), later reimplemented as the R package 'EflowStats'.
 R Morden
 17 Nov 2021
 
+RUN THIS FILE TO CALCULATE MONTHLY AND DAILY STATISTICS.
+- This file will read a csv if flow data (but you might need to adjust the 'read_csv'
+command based on your exact file format). It assumes the input file has 1 column per flow series.
+- It also reads a file of catchment areas (again, you might need to adjust the 
+'read_csv' command). It assumes the index is the site identifier, and exactly matches the 
+column labels in the flow file.
+- It will take flows and catchment areas and calculate flow statistics. They are saved in a long file.
+
 """
 import time
 import pandas as pd
 import numpy as np
-from C2_CalcHITDaily import calcHITDaily
-from C3_CalcHITMonthly import calcHITMonthly
+from Stats_daily import calcHITDaily
+from Stats_monthly import calcHITMonthly
 
 from PathsFiles import paths,files
 
 t = []                                                                         # initialise timings
 t.append(time.time())
-pd.set_option('compute.use_numba', True)                                       # always use NUMBA where possible
 
 cats = pd.read_csv(                                                            # read catchment list with areas
      paths['flow']+files['catstats'],

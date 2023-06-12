@@ -2,6 +2,9 @@
 """
 Partial least squares regression - analysis only
 
+This routine requires flow regime classifications for each site,
+which are calculated from "RegimeClasses.py". Run that first!!
+
 R Morden
 March 2022
 
@@ -28,6 +31,8 @@ import scipy.stats as stats
 import scipy.special as special
 
 from PathsFiles import paths,files                                             # custom libraries
+
+# NOTE - main code is further down. There are some useful subroutines at the top here.
 
 # =====================================================================================================
 # Inverse yeo-johnson transformation
@@ -147,23 +152,19 @@ valmodel = True
 
 stattype = '_171stats'                                                         # file naming info
 
-dayfile = 'Qdaily_ML_171stats_py.csv'                                          # basic input files
+dayfile = 'Qdaily_ML_171stats_py.csv'                                          # basic input files - generated with "Stats_main.py"
 monfile = 'Qmonthly_ML_171stats_py.csv'
 
-outliers = pd.read_csv(paths['flow'] + 'IncludedSites.csv',index_col=0)        # list of all sites to include/exclude
-cats = pd.read_csv(paths['flow']+files['catstats'],comment='#',index_col=0)    # catchment list with areas and lat/long
 circindicators = ['TL1','TH1']
 circmaxvals_d = [366,366]
 circmaxvals_m = [12,12]
 
 # read data files -------------------------------------------------------------------------------------------
 daily_raw = pd.read_csv(paths['out'] + dayfile,index_col=0).transpose()        # read the indicators
-daily_df = daily_raw[outliers['RM_Include']=='include']                        # drop outlier sites
-daily_df = addsincos(daily_df,circindicators,circmaxvals_d)                    # swap circular indicators for sin/cos versions
+daily_df = addsincos(daily_raw,circindicators,circmaxvals_d)                    # swap circular indicators for sin/cos versions
 
 monthly_raw = pd.read_csv(paths['out'] + monfile,index_col=0).transpose()      # read the indicators
-monthly_df = monthly_raw[outliers['RM_Include']=='include']                    # drop outlier sites
-monthly_df = monthly_df.dropna(axis=1)                                         # remove indicators not calculated (roughly 1/3)
+monthly_df = monthly_raw.dropna(axis=1)                                         # remove indicators not calculated (roughly 1/3)
 monthly_df = addsincos(monthly_df,circindicators,circmaxvals_m)                # swap circular indicators for sin/cos versions
 
 # create model details ----------------------------------------------------------------------------
@@ -181,8 +182,7 @@ monthly_df = addsincos(monthly_df,circindicators,circmaxvals_m)                #
 #               'Variable summer\nextremely intermittent'      #12
 #               ]
 
-flowclasses = pd.read_csv(paths['flow']+'SiteCategories.csv',index_col=0)
-flowclasses = flowclasses[outliers['RM_Include']=='include']                   # drop outlier sites
+flowclasses = pd.read_csv(paths['flow']+'SiteCategories.csv',index_col=0)      # NOTE - This file is generated with "RegimeClasses.py".
 
 subset_list = []
 modelname_list = []

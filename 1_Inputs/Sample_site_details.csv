@@ -1,0 +1,13 @@
+﻿#,Sample catchment information
+#,
+#,"You can include whatever other fields you want, such as site name, lat/long, jurisdiction."
+#,
+#,"But make absolutely sure there is a catchment area field in square kilometres, "
+#,"and that field is referenced correctly in ""Stats_main.py"" and ""RegimeClasses.py""."
+#,
+#,"Also, make sure the site id becomes the DataFrame index, and the id's match the columns in the flow file."
+#,
+Siteid,Catchment Area (km2)
+1001,224.4
+1002,130
+1003a,671.6

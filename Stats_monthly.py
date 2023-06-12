@@ -6,12 +6,13 @@ Calculating flow statistics for MONTHLY data
 import pandas as pd
 import numpy as np
 import scipy.stats as scistat
-import C4_HITstats as calc
-from C4_HITstats import meanORmed, scalardiv, seriesdiv, trimseries
+import Stats_functions as calc
+from Stats_functions import meanORmed, scalardiv, seriesdiv, trimseries
 import time
 
 # ==================================================================================================================
 # Calculating indices for average / low / high magnitudes
+# Inputs qm, qy, and par are generated in "CalcHITmonthly" where this subroutine is called from.
 def calcmon_ma_ml_mh(qm,qy,par):
     
     ma = pd.Series(index=range(1,46),dtype='float64')
@@ -140,6 +141,7 @@ def calcmon_ma_ml_mh(qm,qy,par):
 
 # ==================================================================================================================
 # Calculating indices for frequencies of low / high events
+# Inputs qm, qy, and par are generated in "CalcHITmonthly" where this subroutine is called from.
 def calcmon_fl_fh(qm,qy,par):
 
     fl = pd.Series(index=range(1,4),dtype='float64')
@@ -251,6 +253,7 @@ def calcmon_fl_fh(qm,qy,par):
 
 # ==================================================================================================================
 # Calculating indices for durations of low / high events
+# Inputs qm, qy, and par are generated in "CalcHITmonthly" where this subroutine is called from.
 def calcmon_dl_dh(qm,qy,par):
 
     dl = pd.Series(index=range(1,21),dtype='float64')
@@ -389,6 +392,7 @@ def calcmon_dl_dh(qm,qy,par):
 
 # ==================================================================================================================
 # Calculating indices for timing and predictability of flows
+# Inputs qm, qy, and par are generated in "CalcHITmonthly" where this subroutine is called from.
 def calcmon_ta_tl_th(qm,qy,par):
 
     ta = pd.Series(index=range(1,4),dtype='float64')
@@ -488,6 +492,7 @@ def calcmon_ta_tl_th(qm,qy,par):
 
 # ==================================================================================================================
 # Calculating indices for rise and fall rates
+# Inputs qm, qy, and par are generated in "CalcHITmonthly" where this subroutine is called from.
 def calcmon_ra(qm,qy,par):
 
     ra = pd.Series(index=range(1,10),dtype='float64')
@@ -496,6 +501,7 @@ def calcmon_ra(qm,qy,par):
 
 # ==================================================================================================================
 # calculate statistics given DAILY flows for one catchment at a time -----
+# Inputs are generated in "Stats_main.py" where this subroutine is called from.
 def calcHITMonthly(flow_df,opt_median,catskm2,units):
 
     catchments = flow_df.columns.to_list()

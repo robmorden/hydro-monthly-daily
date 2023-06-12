@@ -1,15 +1,16 @@
 """
 File and path inputs
 
+These can be adapted to work with any folder structure
+so you don't have to keep changing path names. You just
+change it once here.
+
 """
 
 paths = {'flow'    : './1_Inputs/',
          'out'     : './2_Outputs/',
          'plsr'    : './9_PLSR/'}
 
-files = {'qday_mm'    : 'HRS2020_Wide_Daily_mm.csv',
-         'qday_ML'    : 'HRS2020_Wide_Daily_ML.csv',
-         'qmon_mm'    : 'HRS2020_Wide_Monthly_mm.csv',
-         'qmon_ML'    : 'HRS2020_Wide_Monthly_ML.csv',
-         'catstats'   : 'hrs_station_details_08_2020.csv'}
+files = {'qday_ML'    : 'Sample_Daily_ML.csv',
+         'catstats'   : 'Sample_site_details.csv'}
          
